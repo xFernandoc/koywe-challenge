@@ -1,0 +1,11 @@
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27018:27017"
+    networks:
+      - app-network
+
+networks:
+  app-network:
