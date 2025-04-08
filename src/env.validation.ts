@@ -13,6 +13,10 @@ class EnviromentVariables {
   @IsNotEmpty()
   @IsString()
   SECRET_JWT: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  EXPIRATION_DAYS_MIN : number;
 }
 
 export function validate(config: Record<string, unknown>) {

@@ -1,4 +1,4 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose from "mongoose";
 import { QuotaEntity } from "src/models/entities/quota.entity";
 import { UserEntity } from "src/models/entities/user.entity";
@@ -62,5 +62,6 @@ export class Quota implements QuotaEntity{
         }
     })
     expiresAt: Date;
-
 }
+
+export const QuotaSchema = SchemaFactory.createForClass(Quota);
