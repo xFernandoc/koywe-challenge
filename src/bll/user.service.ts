@@ -1,21 +1,19 @@
-import { Injectable } from "@nestjs/common";
-import { UserRepository } from "src/dal/user.repository";
-import { CreateUserDTO } from "src/models/dtos/user-created.dto";
+import { Injectable } from '@nestjs/common';
+import { UserRepository } from 'src/dal/user.repository';
+import { CreateUserDTO } from 'src/models/dtos/user-created.dto';
 import * as bcrypt from 'bcrypt';
-import { UserEntity } from "src/models/entities/user.entity";
+import { UserEntity } from 'src/models/entities/user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly userRepository: UserRepository
-  ) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   async createUser(createUserDTO: CreateUserDTO) {
     await this.userRepository.create(createUserDTO);
   }
 
-  async getUserByEmail(email: string,forLogin = false) {
-    return await this.userRepository.findOneByEmail(email,forLogin);
+  async getUserByEmail(email: string, forLogin = false) {
+    return await this.userRepository.findOneByEmail(email, forLogin);
   }
 
   async generatePasswordHash(password: string): Promise<string> {

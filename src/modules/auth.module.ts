@@ -19,16 +19,19 @@ import { UserSchema } from 'src/schemas/user.schema';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('SECRET_JWT'),
         signOptions: {
           expiresIn: '1d',
         },
       }),
     }),
-    MongooseModule.forFeature([{
-      name: 'User', schema: UserSchema
-    }])
+    MongooseModule.forFeature([
+      {
+        name: 'User',
+        schema: UserSchema,
+      },
+    ]),
   ],
   controllers: [AuthController],
   providers: [
@@ -36,7 +39,7 @@ import { UserSchema } from 'src/schemas/user.schema';
     AuthFacade,
     UserService,
     UserRepository,
-    AuthService
+    AuthService,
   ],
 })
-export class AuthModule { }
+export class AuthModule {}
