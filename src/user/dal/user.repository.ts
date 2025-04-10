@@ -9,14 +9,17 @@ export class UserRepository {
   constructor(@InjectModel('User') private userModel: Model<UserEntity>) {}
 
   async create(data: CreateUserDTO) {
-    return await this.userModel.create(data);
+    await this.userModel.create(data);
   }
 
   async update(user: UserEntity) {
     return this.userModel.updateOne({ _id: user._id }, { $set: user }).exec();
   }
 
-  async findOneByEmail(email: string, forLogin = false) {
+  async findOneByEmail(
+    email: string,
+    forLogin = false,
+  ): Promise<UserEntity | undefined> {
     return await this.userModel
       .findOne({ email, isActive: true })
       .select(forLogin ? '+password' : '-password')

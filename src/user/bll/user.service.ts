@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from 'src/dal/user.repository';
+import { UserRepository } from 'src/user/dal/user.repository';
 import { CreateUserDTO } from 'src/models/dtos/user-created.dto';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from 'src/models/entities/user.entity';
@@ -12,7 +12,10 @@ export class UserService {
     await this.userRepository.create(createUserDTO);
   }
 
-  async getUserByEmail(email: string, forLogin = false) {
+  async getUserByEmail(
+    email: string,
+    forLogin = false,
+  ): Promise<UserEntity | undefined> {
     return await this.userRepository.findOneByEmail(email, forLogin);
   }
 
