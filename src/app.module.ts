@@ -15,16 +15,16 @@ import { AuthModule } from './modules/auth.module';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configureService: ConfigService) => {
+      useFactory: (configureService: ConfigService) => {
         return {
           uri: configureService.get('DB_URL'),
           autoIndex: true,
         };
-      }
+      },
     }),
-    AuthModule
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

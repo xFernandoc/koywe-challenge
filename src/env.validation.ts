@@ -16,7 +16,7 @@ class EnviromentVariables {
 
   @IsNotEmpty()
   @IsNumber()
-  EXPIRATION_DAYS_MIN : number;
+  EXPIRATION_DAYS_MIN: number;
 }
 
 export function validate(config: Record<string, unknown>) {

@@ -1,9 +1,9 @@
 export interface JWTPayload {
-    email: string;
-    isActive: boolean;
+  email: string;
+  isActive: boolean;
 }
 
 export interface JWTResponse {
-    accessToken: string;
-    expires: Date;
+  accessToken: string;
+  expires: Date;
 }
