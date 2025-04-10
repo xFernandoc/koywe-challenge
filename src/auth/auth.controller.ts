@@ -1,8 +1,8 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { CurrentUser } from 'src/decorators/request-user.decorator';
-import { AuthFacade } from 'src/facades/auth/auth.facade';
-import { LocalAuthGuard } from 'src/guards/local.guard';
+import { AuthFacade } from './facades/auth/auth.facade';
 import { CreateUserDTO } from 'src/models/dtos/user-created.dto';
+import { LocalAuthGuard } from 'src/guards/local.guard';
+import { CurrentUser } from 'src/decorators/request-user.decorator';
 import { UserEntity } from 'src/models/entities/user.entity';
 
 @Controller('auth')
@@ -11,8 +11,7 @@ export class AuthController {
 
   @Post('create')
   async create(@Body() createUserDTO: CreateUserDTO) {
-    await this.authFacade.create(createUserDTO);
-    const user = await this.authFacade.getUserByEmail(createUserDTO.email);
+    const user = await this.authFacade.create(createUserDTO);
     return {
       message: 'Usuario creado correctamente',
       user,

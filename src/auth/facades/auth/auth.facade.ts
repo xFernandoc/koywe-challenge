@@ -1,8 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { AuthService } from 'src/bll/auth.service';
-import { UserService } from 'src/bll/user.service';
+import { AuthService } from 'src/auth/bll/auth.service';
 import { CreateUserDTO } from 'src/models/dtos/user-created.dto';
 import { UserEntity } from 'src/models/entities/user.entity';
+import { JWTResponse } from 'src/types/common';
+import { UserService } from 'src/user/bll/user.service';
 
 @Injectable()
 export class AuthFacade {
@@ -11,7 +12,7 @@ export class AuthFacade {
     private readonly authService: AuthService,
   ) {}
 
-  async create(createUserDTO: CreateUserDTO) {
+  async create(createUserDTO: CreateUserDTO): Promise<UserEntity> {
     const getUserExist = await this.userService.getUserByEmail(
       createUserDTO.email,
     );
@@ -23,17 +24,10 @@ export class AuthFacade {
     );
     createUserDTO.password = passwordHash;
     await this.userService.createUser(createUserDTO);
+    return await this.userService.getUserByEmail(createUserDTO.email, false);
   }
 
-  async getUserByEmail(email: string) {
-    const user = await this.userService.getUserByEmail(email, false);
-    if (!user) {
-      throw new BadRequestException('User not found');
-    }
-    return user;
-  }
-
-  async login(user: UserEntity) {
+  async login(user: UserEntity): Promise<JWTResponse> {
     return await this.authService.singIn(user);
   }
 }
