@@ -20,12 +20,16 @@ export class User implements UserEntity {
     @Prop({
         required: true,
         type: String,
+        unique: true,
+        lowercase: true,
+        trim: true
     })
     email: string;
 
     @Prop({
         required: true,
         type: String,
+        select: false,
     })
     password: string;
 
