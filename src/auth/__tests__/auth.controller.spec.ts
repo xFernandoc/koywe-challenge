@@ -10,6 +10,30 @@ describe('AuthController', () => {
   let controller: AuthController;
   let authFacade: jest.Mocked<AuthFacade>;
 
+  const mockUser: UserEntity = {
+    firstName: 'Luis',
+    lastName: 'Colchon',
+    email: 'lcolchon@gmail.com',
+    password: 'pass-hashed',
+    createdAt: new Date(),
+    lastLogin: undefined,
+    isActive: true,
+  };
+
+  const createUserDtoOk: CreateUserDTO = {
+    firstName: 'Luis',
+    lastName: 'Colchon',
+    email: 'lcolchon@gmail.com',
+    password: 'pass-hashed',
+  };
+
+  const createUserDtoNotOk: CreateUserDTO = {
+    firstName: 'Luis',
+    lastName: 'Colchon',
+    email: 'correo',
+    password: 'pass-hashed',
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
@@ -30,36 +54,28 @@ describe('AuthController', () => {
 
   describe('create user', () => {
     it('Creando usuario y debería devolver el mensaje y el usuario creado', async () => {
-      const mockUser: UserEntity = {
-        firstName: 'Luis',
-        lastName: 'Colchon',
-        email: 'lcolchon@mail.com',
-        password: 'pass-hashed',
-        createdAt: new Date(),
-        lastLogin: undefined,
-        isActive: true,
-      };
-      const dto: CreateUserDTO = {
-        firstName: 'Luis',
-        lastName: 'Colchon',
-        email: 'lcolchon@gmail.com',
-        password: 'pass-hashed',
-      };
-
       // simulamos la creacion de usuario con el retorno de un usuario
-      const spyCreate = authFacade.create.mockResolvedValue(mockUser);
+      authFacade.create.mockResolvedValue(mockUser);
 
       // ejecutamos la creacion
-      const result = await controller.create(dto);
+      const result = await controller.create(createUserDtoOk);
+
+      expect(authFacade.create).toHaveBeenCalledWith(createUserDtoOk);
 
       // comparamos el resultado
       expect(result).toEqual({
         message: 'Usuario creado correctamente',
         user: mockUser,
       });
+    });
 
-      // comparamos el body recibido sea el adecuado
-      expect(spyCreate).toHaveBeenCalledWith(dto);
+    it('Creando usuario pero con información incorrecta', async () => {
+      authFacade.create.mockRejectedValue(
+        new BadRequestException('Email incorrect'),
+      );
+      await expect(controller.create(createUserDtoNotOk)).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('Creando un usuario ya existente, deberia dar un error', async () => {
@@ -70,7 +86,6 @@ describe('AuthController', () => {
         password: 'pass-hashedv2',
       };
 
-      // simulamos la creacion del usuario pero con erro ya que el usuario ya existe
       authFacade.create.mockRejectedValue(
         new BadRequestException('User already exists'),
       );
@@ -87,14 +102,13 @@ describe('AuthController', () => {
         expires: new Date(),
       };
 
-      // simulamos login ok con retorno del token
-      const spyLogin = authFacade.login.mockResolvedValue(mockToken);
+      authFacade.login.mockResolvedValue(mockToken);
 
       const result = await controller.login(mockUser);
 
       expect(result).toEqual(mockToken);
 
-      expect(spyLogin).toHaveBeenCalledWith(mockUser);
+      expect(authFacade.login).toHaveBeenCalledWith(mockUser);
     });
   });
 });

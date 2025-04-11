@@ -13,7 +13,9 @@ export class UserRepository {
   }
 
   async update(user: UserEntity) {
-    return this.userModel.updateOne({ _id: user._id }, { $set: user }).exec();
+    return await this.userModel
+      .updateOne({ _id: user._id }, { $set: user })
+      .exec();
   }
 
   async findOneByEmail(
