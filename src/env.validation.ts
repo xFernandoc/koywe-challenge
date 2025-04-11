@@ -16,7 +16,15 @@ class EnviromentVariables {
 
   @IsNotEmpty()
   @IsNumber()
-  EXPIRATION_DAYS_MIN: number;
+  EXPIRATION_MIN: number;
+
+  @IsNotEmpty()
+  @IsString()
+  BASE_URL_API_CURRENCY: string;
+
+  @IsNotEmpty()
+  @IsString()
+  API_CURRENCY_SERVICE_GET_PRICE: string;
 }
 
 export function validate(config: Record<string, unknown>) {

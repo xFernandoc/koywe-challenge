@@ -1,11 +1,20 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { QuotaEntity } from 'src/models/entities/quota.entity';
+import { nanoid } from 'nanoid';
+import { QuoteEntity } from 'src/models/entities/quote.entity';
 import { UserEntity } from 'src/models/entities/user.entity';
 
 @Schema()
-export class Quota implements QuotaEntity {
+export class Quote implements QuoteEntity {
   _id: string;
+
+  @Prop({
+    unique: true,
+    required: false,
+    type: String,
+    default: nanoid(8).toUpperCase(),
+  })
+  id?: string;
 
   @Prop({
     required: true,
@@ -55,13 +64,13 @@ export class Quota implements QuotaEntity {
     required: true,
     type: Date,
     default: function () {
-      const daysToAdd = parseInt(process.env.EXPIRATION_DAYS || '5', 10);
-      const timestamp = new Date();
-      timestamp.setDate(timestamp.getDate() + daysToAdd);
-      return timestamp;
+      const minutesToAdd = parseInt(process.env.EXPIRATION_MIN || '5', 10);
+      const now = new Date();
+      const expirationTime = new Date(now.getTime() + minutesToAdd * 60 * 1000);
+      return expirationTime;
     },
   })
   expiresAt: Date;
 }
 
-export const QuotaSchema = SchemaFactory.createForClass(Quota);
+export const QuoteSchema = SchemaFactory.createForClass(Quote);

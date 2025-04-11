@@ -1,6 +1,6 @@
 import { UserEntity } from './user.entity';
 
-export interface QuotaEntity {
+export interface QuoteEntity {
   to: string;
   from: string;
   amount: number;
@@ -8,5 +8,6 @@ export interface QuotaEntity {
   convertedAmount: number;
   user: string | UserEntity;
   timestamp: Date;
-  expiresAt: Date;
+  expiresAt?: Date;
+  id?: string;
 }
