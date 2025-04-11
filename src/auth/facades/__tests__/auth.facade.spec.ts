@@ -55,19 +55,17 @@ describe('authFacade', () => {
         isActive: true,
       };
 
-      const userServiceMail = userService.getUserByEmail
+      userService.getUserByEmail
         .mockResolvedValueOnce(null) // validacion
         .mockResolvedValueOnce(createdUser); // creacion
-      const userServicePassword =
-        userService.generatePasswordHash.mockResolvedValue(hashedPassword);
-      const userServiceCreated =
-        userService.createUser.mockResolvedValue(undefined);
+      userService.generatePasswordHash.mockResolvedValue(hashedPassword);
+      userService.createUser.mockResolvedValue(undefined);
 
       const result = await authFacade.create(dto);
 
-      expect(userServiceMail).toHaveBeenCalledWith(dto.email);
-      expect(userServicePassword).toHaveBeenCalledWith('123456'); // ya que nuestro dto de entrada se modifca
-      expect(userServiceCreated).toHaveBeenCalledWith({
+      expect(userService.getUserByEmail).toHaveBeenCalledWith(dto.email);
+      expect(userService.generatePasswordHash).toHaveBeenCalledWith('123456'); // ya que nuestro dto de entrada se modifca
+      expect(userService.createUser).toHaveBeenCalledWith({
         ...dto,
         password: hashedPassword,
       });
@@ -110,10 +108,9 @@ describe('authFacade', () => {
         accessToken: 'token',
         expires: new Date(),
       };
-      const authServiceSignIng =
-        authService.singIn.mockResolvedValue(tokenMock);
+      authService.singIn.mockResolvedValue(tokenMock);
       const result = await authFacade.login(user);
-      expect(authServiceSignIng).toHaveBeenCalledWith(user);
+      expect(authService.singIn).toHaveBeenCalledWith(user);
       expect(result).toEqual(tokenMock);
     });
   });

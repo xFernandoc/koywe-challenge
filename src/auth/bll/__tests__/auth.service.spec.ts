@@ -35,10 +35,9 @@ describe('AuthService', () => {
 
   it('singIn - Creación de token con payload entregado', async () => {
     const mockToken = 'jwt_hashed';
-    const jwtServiceSignAsync =
-      jwtService.signAsync.mockResolvedValue(mockToken);
+    jwtService.signAsync.mockResolvedValue(mockToken);
     const result = await authService.singIn(user);
-    expect(jwtServiceSignAsync).toHaveBeenCalledWith({
+    expect(jwtService.signAsync).toHaveBeenCalledWith({
       email: user.email,
       isActive: user.isActive,
     });

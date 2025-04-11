@@ -41,10 +41,10 @@ describe('User Service', () => {
   });
 
   it('Retornar usuario por correo', async () => {
-    const userRepositoryFindByEmail = userRepository.findOneByEmail.mockResolvedValue(userMock);
+    userRepository.findOneByEmail.mockResolvedValue(userMock);
     const result = await userService.getUserByEmail(userMock.email);
     expect(result).toBe(userMock);
-    expect(userRepositoryFindByEmail).toHaveBeenCalledWith(
+    expect(userRepository.findOneByEmail).toHaveBeenCalledWith(
       userMock.email,
       false,
     );
@@ -86,10 +86,13 @@ describe('User Service', () => {
       password: 'pass-hashed',
     };
 
+    userRepository.create.mockResolvedValue(undefined);
+
     const result = await userService.createUser(dto);
 
-    expect(result).toBe(undefined);
     expect(userRepository.create).toHaveBeenCalled();
+
+    expect(result).toBe(undefined);
   });
 
   it('Actualización correcta del último login del usuario', async () => {

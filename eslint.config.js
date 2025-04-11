@@ -26,7 +26,18 @@ module.exports = [
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       'prettier/prettier': 'error',
+      '@typescript-eslint/unbound-method': 'error',
     },
   },
-  configPrettier,
+  {
+    files: ['**/*.spec.ts', '**/*.test.ts'],
+    plugins: {
+      jest: require('eslint-plugin-jest'),
+    },
+    rules: {
+      '@typescript-eslint/unbound-method': 'off',
+      'jest/unbound-method': 'error',
+    },
+  },
+  configPrettier
 ];

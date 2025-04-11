@@ -20,7 +20,6 @@ export class User implements UserEntity {
   @Prop({
     required: true,
     type: String,
-    unique: true,
     lowercase: true,
     trim: true,
   })
