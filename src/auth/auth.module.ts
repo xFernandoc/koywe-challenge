@@ -7,9 +7,11 @@ import { LocalStrategy } from 'src/providers/auth/local.provider';
 import { AuthController } from './auth.controller';
 import { AuthService } from './bll/auth.service';
 import { UserModule } from 'src/user/user.module';
+import { JWTStrategy } from 'src/providers/auth/jwt.provider';
 
 @Module({
   imports: [
+    ConfigModule,
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
@@ -26,6 +28,6 @@ import { UserModule } from 'src/user/user.module';
     UserModule,
   ],
   controllers: [AuthController],
-  providers: [LocalStrategy, AuthFacade, AuthService],
+  providers: [LocalStrategy, JWTStrategy, AuthFacade, AuthService],
 })
 export class AuthModule {}
