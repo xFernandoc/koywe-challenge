@@ -63,7 +63,8 @@ export class ExchangeProvider {
         `${this.BASE_URL}${urlCurrency}`,
       );
       const responsePrice = await lastValueFrom(requestObs);
-      return responsePrice.data;
+      const dataResponse = Object.keys(responsePrice.data);
+      return dataResponse;
     } catch (error: unknown) {
       if (
         error instanceof AxiosError &&

@@ -19,11 +19,14 @@ export class AuthFacade {
     if (getUserExist) {
       throw new BadRequestException('User already exists');
     }
+
     const passwordHash = await this.userService.generatePasswordHash(
       createUserDTO.password,
     );
     createUserDTO.password = passwordHash;
+
     await this.userService.createUser(createUserDTO);
+
     return await this.userService.getUserByEmail(createUserDTO.email, false);
   }
 
