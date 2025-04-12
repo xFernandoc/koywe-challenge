@@ -14,4 +14,8 @@ export class QuoteRepository {
   async findById(id: string) : Promise<QuoteEntity>{
     return await this.quotaModel.findOne({ id }).select('-_id -__v').exec()
   }
+
+  async findByIdAndUser(id: string, userId: string): Promise<QuoteEntity | null> {
+    return await this.quotaModel.findOne({ id, user: userId }).exec();
+  }
 }

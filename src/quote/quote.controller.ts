@@ -13,6 +13,7 @@ import { CreateQuoteRequestDTO } from 'src/models/dtos/quote-request.dto';
 import { JWTGuardCustom } from 'src/guards/jwt.guard';
 import { CurrentUser } from 'src/decorators/request-user.decorator';
 import { UserEntity } from 'src/models/entities/user.entity';
+import { QuoteOwnershipGuard } from 'src/guards/quote.guard';
 
 @UseGuards(JWTGuardCustom)
 @Controller('quote')
@@ -35,18 +36,10 @@ export class QuoteController {
     return await this.quoteFacade.getCurrency();
   }
 
+  
+  @UseGuards(QuoteOwnershipGuard)
   @Get('/:id')
-  async getQuote(
-    @CurrentUser() user: UserEntity,
-    @Param('id') id: string
-  ) {
-    const quote = await this.quoteFacade.getQuote(id);
-    if (!quote) {
-      throw new NotFoundException('Cotización no existe');
-    }
-    if (quote.user == user._id.toString()) {
-      return quote;
-    }
-    throw new UnauthorizedException('Cotizacion no pertenece al usuario');
+  async getQuote(@Param('id') id: string) {
+    return await this.quoteFacade.getQuote(id);
   }
 }
