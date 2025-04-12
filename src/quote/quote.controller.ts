@@ -24,12 +24,10 @@ export class QuoteController {
     @Body() quoteRequestApiDTO: CreateQuoteRequestDTO,
     @CurrentUser() user: UserEntity,
   ) {
-    const x = await this.quoteFacade.registerQuote(
+    return await this.quoteFacade.registerQuote(
       quoteRequestApiDTO,
       user._id,
     );
-    console.log(x);
-    return x;
   }
 
   @Get('currency-available')
@@ -40,7 +38,7 @@ export class QuoteController {
   @Get('/:id')
   async getQuote(
     @CurrentUser() user: UserEntity,
-    @Param() { id }: { id: string },
+    @Param('id') id: string
   ) {
     const quote = await this.quoteFacade.getQuote(id);
     if (!quote) {

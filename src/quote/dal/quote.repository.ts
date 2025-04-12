@@ -7,11 +7,11 @@ import { QuoteEntity } from 'src/models/entities/quote.entity';
 export class QuoteRepository {
   constructor(@InjectModel('Quote') private quotaModel: Model<QuoteEntity>) {}
 
-  async create(quoteData: QuoteEntity) {
+  async create(quoteData: QuoteEntity) : Promise<QuoteEntity> {
     return await this.quotaModel.create(quoteData);
   }
 
-  async findById(id: string) {
-    return await this.quotaModel.findOne({ id }).select('-_id -__v').exec();
+  async findById(id: string) : Promise<QuoteEntity>{
+    return await this.quotaModel.findOne({ id }).select('-_id -__v').exec()
   }
 }

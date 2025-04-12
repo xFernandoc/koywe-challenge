@@ -38,7 +38,7 @@ export class QuoteService {
     return quote;
   }
 
-  async createQuote(quoteEntity: QuoteEntity): Promise<QuoteEntity> {
+  async createQuote(quoteEntity: QuoteEntity){
     return await this.quoteRepository.create(quoteEntity);
   }
 
