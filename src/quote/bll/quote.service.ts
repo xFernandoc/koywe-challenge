@@ -7,15 +7,11 @@ import { CreateQuoteRequestDTO } from 'src/models/dtos/quote-request.dto';
 export class QuoteService {
   constructor(private readonly quoteRepository: QuoteRepository) {}
 
-  calculateConvertValue(amount: number, price: number): number {
+  public calculateConvertValue(amount: number, price: number): number {
     return amount * price;
   }
 
-  createEntityQuote(
-    quoteDTO: CreateQuoteRequestDTO,
-    user: string,
-    rate: number,
-  ): QuoteEntity {
+  public createEntityQuote(quoteDTO: CreateQuoteRequestDTO,user: string,rate: number): QuoteEntity {
     return {
       ...quoteDTO,
       rate,
@@ -38,7 +34,7 @@ export class QuoteService {
     return quote;
   }
 
-  async createQuote(quoteEntity: QuoteEntity): Promise<QuoteEntity> {
+  async createQuote(quoteEntity: QuoteEntity){
     return await this.quoteRepository.create(quoteEntity);
   }
 

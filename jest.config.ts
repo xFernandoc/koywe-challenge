@@ -25,11 +25,13 @@ export default {
         '/dist/',
         'jest.config.ts',
         'eslint.config.js',
+        ".e2e-spec.ts"
     ],
     testPathIgnorePatterns: [
         '/node_modules/',
         '/dist/',
         'jest.config.ts',
         'eslint.config.js',
+        ".e2e-spec.ts"
     ]
 };
