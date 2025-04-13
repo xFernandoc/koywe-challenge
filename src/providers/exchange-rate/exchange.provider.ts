@@ -19,7 +19,10 @@ export class ExchangeProvider {
   private readonly BASE_URL = process.env.BASE_URL_API_CURRENCY;
   constructor(private readonly httpService: HttpService) {}
 
-  async getPrice({ from, to }: QuoteRequestApiDTO) : Promise<CurrencyData | null> {
+  async getPrice({
+    from,
+    to,
+  }: QuoteRequestApiDTO): Promise<CurrencyData | null> {
     try {
       const urlPrice = process.env.API_CURRENCY_SERVICE_GET_PRICE;
       const requestObs = this.httpService.get<PriceDataResponse>(
@@ -31,8 +34,8 @@ export class ExchangeProvider {
           'No existe precio para esta combinación de moneda.',
         );
       }
-      const dataResponse =  responsePrice.data;
-      return dataResponse[from] || null
+      const dataResponse = responsePrice.data;
+      return dataResponse[from] || null;
     } catch (error: unknown) {
       if (
         error instanceof AxiosError &&

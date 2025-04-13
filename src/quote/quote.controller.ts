@@ -25,10 +25,7 @@ export class QuoteController {
     @Body() quoteRequestApiDTO: CreateQuoteRequestDTO,
     @CurrentUser() user: UserEntity,
   ) {
-    return await this.quoteFacade.registerQuote(
-      quoteRequestApiDTO,
-      user._id,
-    );
+    return await this.quoteFacade.registerQuote(quoteRequestApiDTO, user._id);
   }
 
   @Get('currency-available')
@@ -36,7 +33,6 @@ export class QuoteController {
     return await this.quoteFacade.getCurrency();
   }
 
-  
   @UseGuards(QuoteOwnershipGuard)
   @Get('/:id')
   async getQuote(@Param('id') id: string) {
