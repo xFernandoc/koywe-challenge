@@ -7,12 +7,10 @@ import { CreateUserDTO } from 'src/models/dtos/user-created.dto';
 describe('User Repository', () => {
   let userRepository: UserRepository;
   let userModel: {
-    create: jest.Mock;
-    updateOne: jest.Mock;
-    findOne: jest.Mock;
-    select: jest.Mock;
-    exec: jest.Mock;
-  };
+    findOne: jest.Mock,
+    create: jest.Mock,
+    updateOne: jest.Mock
+  }
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -22,10 +20,8 @@ describe('User Repository', () => {
           provide: getModelToken('User'),
           useValue: {
             create: jest.fn(),
-            updateOne: jest.fn().mockReturnThis(),
-            findOne: jest.fn().mockReturnThis(),
-            select: jest.fn().mockReturnThis(),
-            exec: jest.fn(),
+            findOne: jest.fn(),
+            updateOne: jest.fn()
           },
         },
       ],
@@ -41,7 +37,6 @@ describe('User Repository', () => {
       firstName: 'Luis',
       lastName: 'Colchon',
     };
-
     await userRepository.create(dataCreateUser);
     expect(userModel.create).toHaveBeenCalledWith(dataCreateUser);
   });
@@ -55,15 +50,15 @@ describe('User Repository', () => {
       isActive: true,
       lastLogin: undefined,
     };
+    
     const execMock = jest.fn().mockResolvedValue(mockUser);
     const selectMock = jest.fn().mockReturnValue({ exec: execMock });
-    const findOneMock = jest.fn().mockReturnValue({ select: selectMock });
 
-    userModel.findOne = findOneMock;
+    userModel.findOne.mockReturnValue({select: selectMock})
 
     const result = await userRepository.findOneByEmail('test@mail.com');
 
-    expect(findOneMock).toHaveBeenCalledWith({
+    expect(userModel.findOne).toHaveBeenCalledWith({
       email: 'test@mail.com',
       isActive: true,
     });
@@ -82,15 +77,15 @@ describe('User Repository', () => {
       isActive: true,
       lastLogin: undefined,
     };
+    
     const execMock = jest.fn().mockResolvedValue(mockUser);
     const selectMock = jest.fn().mockReturnValue({ exec: execMock });
-    const findOneMock = jest.fn().mockReturnValue({ select: selectMock });
 
-    userModel.findOne = findOneMock;
+    userModel.findOne.mockReturnValue({select: selectMock});
 
     const result = await userRepository.findOneByEmail('test@mail.com', true);
 
-    expect(findOneMock).toHaveBeenCalledWith({
+    expect(userModel.findOne).toHaveBeenCalledWith({
       email: 'test@mail.com',
       isActive: true,
     });
@@ -110,7 +105,13 @@ describe('User Repository', () => {
       isActive: true,
       lastLogin: undefined,
     };
+
+    const execMock = jest.fn().mockResolvedValue(null);
+
+    userModel.updateOne.mockReturnValue({exec: execMock})
+
     await userRepository.update(mockUpdate);
+
     expect(userModel.updateOne).toHaveBeenCalledWith(
       { _id: mockUpdate._id },
       { $set: mockUpdate },
