@@ -2,7 +2,8 @@ import { QuoteRepository } from "src/quote/dal/quote.repository"
 import { QuoteService } from "../quote.service";
 import { Test } from "@nestjs/testing";
 import { QuoteEntity } from "src/models/entities/quote.entity";
-import { NotFoundException } from "@nestjs/common";
+import { NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { CreateQuoteRequestDTO } from "src/models/dtos/quote-request.dto";
 
 describe('Quote service',() => {
     let quoteService: QuoteService
@@ -28,7 +29,8 @@ describe('Quote service',() => {
                         provide : QuoteRepository,
                         useValue: {
                             create : jest.fn(),
-                            findById : jest.fn()
+                            findById : jest.fn(),
+                            findByIdAndUser : jest.fn()
                         }
                     }
                 ]
@@ -104,6 +106,43 @@ describe('Quote service',() => {
             repository.findById.mockResolvedValue(mockExpired);
             await expect(quoteService.getValidQuoteByID(mockExpired.id)).rejects.toThrow(NotFoundException);
             await expect(quoteService.getValidQuoteByID(mockExpired.id)).rejects.toThrow('Cotización expirada');
+        })
+    })
+
+    describe('Validar propiedad de cotizacion', () => {
+        it('Cotización pertenece a usuario',async () => {
+            repository.findByIdAndUser.mockResolvedValue(mockQuoteTemplate);
+            const resultQuote = await quoteService.validQuoteOwner(mockQuoteTemplate.id,mockQuoteTemplate.user as string);
+            expect(resultQuote).toEqual(mockQuoteTemplate);
+            expect(repository.findByIdAndUser).toHaveBeenCalledWith(mockQuoteTemplate.id,mockQuoteTemplate.user)
+        })
+        it('Cotización no pertenece a usuario',async() => {
+            repository.findByIdAndUser.mockResolvedValue(null);
+            await expect(quoteService.validQuoteOwner(mockQuoteTemplate.id,"id-bad")).rejects.toThrow(UnauthorizedException);
+            await expect(quoteService.validQuoteOwner(mockQuoteTemplate.id,"id-bad")).rejects.toThrow('No tienes acceso a esta cotización');
+            expect(repository.findByIdAndUser).toHaveBeenCalledWith(mockQuoteTemplate.id,"id-bad")
+        })
+    })
+
+    describe('Servicios adicionales',() => {
+
+        it('Validando calculo del valor convertido',() => {
+            const amount = 200;
+            const rate = 1.5;
+            const resultExpected =  200 * 1.5;
+            const calculateConvertValue = quoteService.calculateConvertValue(amount,rate);
+            expect(calculateConvertValue).toEqual(resultExpected)
+        })
+        it('validando creación de entity quote', () => {
+            const createQuoteDTO : CreateQuoteRequestDTO = {
+                amount: 2000,
+                from: "USDT",
+                to: "BTC"
+            }
+
+            const quoteEntity = quoteService.createEntityQuote(createQuoteDTO,'user-id',2.5)
+            expect(quoteEntity.convertedAmount).toEqual(5000);
+            expect(quoteEntity.timestamp).toBeInstanceOf(Date);
         })
     })
 })

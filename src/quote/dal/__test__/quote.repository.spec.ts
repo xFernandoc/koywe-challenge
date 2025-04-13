@@ -62,11 +62,11 @@ describe('QuoteRepository', () => {
             const mockSelect = jest.fn().mockReturnValue({exec : mockExec})
             quotaModel.findOne.mockReturnValue({select: mockSelect})
 
-            const quoteFindResult = await repository.findById('id-quote');
+            const quoteFindResult = await repository.findById(mockQuote.id);
 
-            expect(quotaModel.findOne).toHaveBeenCalledWith({id: 'id-quote'})
+            expect(quotaModel.findOne).toHaveBeenCalledWith({id: mockQuote.id})
             expect(mockSelect).toHaveBeenCalledWith('-_id -__v')
-            expect(quoteFindResult).toEqual(quoteFindResult)
+            expect(quoteFindResult).toEqual(mockQuote)
         })
 
         it('Buscar una cotización que no existe ', async () => {
@@ -78,6 +78,28 @@ describe('QuoteRepository', () => {
             expect(quotaModel.findOne).toHaveBeenCalledWith({id: 'id-quote-bad'})
             expect(mockSelect).toHaveBeenCalledWith('-_id -__v')
             expect(quoteFindResult).toBeNull()
+        })
+    })
+
+    describe('Buscar una cotizacion validando el usuario dueño',() => {
+        it('Buscar una cotizacion correctamente',async () => {
+            const mockExec = jest.fn().mockResolvedValue(mockQuote);
+            quotaModel.findOne.mockReturnValue({exec : mockExec})
+
+            const quoteUserFindResult = await repository.findByIdAndUser(mockQuote.id,mockQuote.user as string);
+
+            expect(quotaModel.findOne).toHaveBeenCalledWith({id: mockQuote.id, user: mockQuote.user as string})
+            expect(quoteUserFindResult).toEqual(mockQuote)
+        })
+
+        it('Buscar una cotización que no pertenece al usuario ', async () => {
+            const mockExec = jest.fn().mockResolvedValue(null);
+            quotaModel.findOne.mockReturnValue({exec : mockExec})
+
+            const quoteUserFindResult = await repository.findByIdAndUser(mockQuote.id,'user-bad');
+
+            expect(quotaModel.findOne).toHaveBeenCalledWith({id: mockQuote.id, user: 'user-bad'})
+            expect(quoteUserFindResult).toBeNull()
         })
     })
 })

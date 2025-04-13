@@ -1,4 +1,4 @@
-interface CurrencyData {
+export interface CurrencyData {
   currency: string;
   price: string;
   timestamp: string;
