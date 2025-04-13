@@ -13,9 +13,7 @@ export class QuoteOwnershipGuard implements CanActivate {
       .getRequest();
     const user = req.user;
     const quoteId = req.params.id;
-
     await this.quoteService.validQuoteOwner(quoteId, user._id);
-
     return true;
   }
 }
