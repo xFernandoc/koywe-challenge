@@ -4,8 +4,22 @@ services:
     container_name: mongodb
     ports:
       - "27018:27017"
+    volumes:
+      - mongodbdata:/data/db
     networks:
-      - app-network
-
+      - koywe-network
+  backend:
+    build: .
+    container_name: nest-backend
+    ports:
+      - "3004:3000"
+    depends_on:
+      - mongodb
+    env_file:
+      - .env.docker
+    networks:
+      - koywe-network
+volumes:
+  mongodbdata:
 networks:
-  app-network:
+  koywe-network:
