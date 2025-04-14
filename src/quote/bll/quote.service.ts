@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { QuoteEntity } from 'src/models/entities/quote.entity';
 import { QuoteRepository } from '../dal/quote.repository';
 import { CreateQuoteRequestDTO } from 'src/models/dtos/quote-request.dto';
@@ -11,7 +15,11 @@ export class QuoteService {
     return amount * price;
   }
 
-  public createEntityQuote(quoteDTO: CreateQuoteRequestDTO,user: string,rate: number): QuoteEntity {
+  public createEntityQuote(
+    quoteDTO: CreateQuoteRequestDTO,
+    user: string,
+    rate: number,
+  ): QuoteEntity {
     return {
       ...quoteDTO,
       rate,
@@ -34,7 +42,7 @@ export class QuoteService {
     return quote;
   }
 
-  async createQuote(quoteEntity: QuoteEntity){
+  async createQuote(quoteEntity: QuoteEntity) {
     return await this.quoteRepository.create(quoteEntity);
   }
 
@@ -42,7 +50,7 @@ export class QuoteService {
     return await this.quoteRepository.findById(id);
   }
 
-  async validQuoteOwner(id: string, user: string){
+  async validQuoteOwner(id: string, user: string) {
     const quote = await this.quoteRepository.findByIdAndUser(id, user);
     if (!quote) {
       throw new UnauthorizedException('No tienes acceso a esta cotización');
