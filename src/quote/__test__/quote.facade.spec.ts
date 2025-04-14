@@ -4,10 +4,7 @@ import { ExchangeProvider } from 'src/providers/exchange-rate/exchange.provider'
 import { QuoteService } from '../bll/quote.service';
 import { QuoteEntity } from 'src/models/entities/quote.entity';
 import { CreateQuoteRequestDTO } from 'src/models/dtos/quote-request.dto';
-import {
-  CurrencyData,
-  PriceDataResponse,
-} from 'src/providers/exchange-rate/type/api-currency.entity';
+import { CurrencyData } from 'src/providers/exchange-rate/type/api-currency.entity';
 import { NotFoundException } from '@nestjs/common';
 
 describe('Quote Facade', () => {

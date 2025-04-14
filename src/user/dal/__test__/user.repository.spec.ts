@@ -1,13 +1,18 @@
 import { Test } from '@nestjs/testing';
 import { UserRepository } from '../user.repository';
-import { Model } from 'mongoose';
 import { UserEntity } from 'src/models/entities/user.entity';
 import { getModelToken } from '@nestjs/mongoose';
 import { CreateUserDTO } from 'src/models/dtos/user-created.dto';
 
 describe('User Repository', () => {
   let userRepository: UserRepository;
-  let userModel: jest.Mocked<Model<UserEntity>>;
+  let userModel: {
+    create: jest.Mock;
+    updateOne: jest.Mock;
+    findOne: jest.Mock;
+    select: jest.Mock;
+    exec: jest.Mock;
+  };
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -50,7 +55,6 @@ describe('User Repository', () => {
       isActive: true,
       lastLogin: undefined,
     };
-    // mocks para modelo de mongoose
     const execMock = jest.fn().mockResolvedValue(mockUser);
     const selectMock = jest.fn().mockReturnValue({ exec: execMock });
     const findOneMock = jest.fn().mockReturnValue({ select: selectMock });
@@ -78,7 +82,6 @@ describe('User Repository', () => {
       isActive: true,
       lastLogin: undefined,
     };
-    // mocks para modelo de mongoose
     const execMock = jest.fn().mockResolvedValue(mockUser);
     const selectMock = jest.fn().mockReturnValue({ exec: execMock });
     const findOneMock = jest.fn().mockReturnValue({ select: selectMock });

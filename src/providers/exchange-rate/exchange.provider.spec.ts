@@ -99,15 +99,15 @@ describe('Exchange provider', () => {
       };
       httpService.get.mockReturnValue(of(mockResponse));
 
-      expect(exchangeProvider.getPrice(mockCreateQuoteDTO)).rejects.toThrow(
-        BadRequestException,
-      );
-      expect(exchangeProvider.getPrice(mockCreateQuoteDTO)).rejects.toThrow(
-        'No existe precio para esta combinación de moneda.',
-      );
+      await expect(
+        exchangeProvider.getPrice(mockCreateQuoteDTO),
+      ).rejects.toThrow(BadRequestException);
+      await expect(
+        exchangeProvider.getPrice(mockCreateQuoteDTO),
+      ).rejects.toThrow('No existe precio para esta combinación de moneda.');
     });
 
-    it('Mostrar errores axios de api 2002', () => {
+    it('Mostrar errores axios de api 2002', async () => {
       const axiosError = new axios.AxiosError(
         'Request failed',
         'ERR_BAD_REQUEST',
@@ -132,14 +132,16 @@ describe('Exchange provider', () => {
         },
       };
       httpService.get.mockReturnValue(throwError(() => axiosError));
-      expect(exchangeProvider.getPrice(mockCreateQuoteDTO)).rejects.toThrow(
-        BadRequestException,
-      );
-      expect(exchangeProvider.getPrice(mockCreateQuoteDTO)).rejects.toThrow(
+      await expect(
+        exchangeProvider.getPrice(mockCreateQuoteDTO),
+      ).rejects.toThrow(BadRequestException);
+      await expect(
+        exchangeProvider.getPrice(mockCreateQuoteDTO),
+      ).rejects.toThrow(
         `Moneda ${currencyError} no existe, consulta en /quote/currency-available`,
       );
     });
-    it('Mostrar errores axios de api no conocido', () => {
+    it('Mostrar errores axios de api no conocido', async () => {
       const axiosError = new axios.AxiosError(
         'Request failed',
         'ERR_BAD_REQUEST',
@@ -163,23 +165,23 @@ describe('Exchange provider', () => {
         },
       };
       httpService.get.mockReturnValue(throwError(() => axiosError));
-      expect(exchangeProvider.getPrice(mockCreateQuoteDTO)).rejects.toThrow(
-        BadRequestException,
-      );
-      expect(exchangeProvider.getPrice(mockCreateQuoteDTO)).rejects.toThrow(
-        `Error desconocido`,
-      );
+      await expect(
+        exchangeProvider.getPrice(mockCreateQuoteDTO),
+      ).rejects.toThrow(BadRequestException);
+      await expect(
+        exchangeProvider.getPrice(mockCreateQuoteDTO),
+      ).rejects.toThrow(`Error desconocido`);
     });
-    it('Mostrar errores no axios de api no conocido', () => {
+    it('Mostrar errores no axios de api no conocido', async () => {
       httpService.get.mockReturnValue(
         throwError(() => new Error('No conocido')),
       );
-      expect(exchangeProvider.getPrice(mockCreateQuoteDTO)).rejects.toThrow(
-        InternalServerErrorException,
-      );
-      expect(exchangeProvider.getPrice(mockCreateQuoteDTO)).rejects.toThrow(
-        `Error desconocido`,
-      );
+      await expect(
+        exchangeProvider.getPrice(mockCreateQuoteDTO),
+      ).rejects.toThrow(InternalServerErrorException);
+      await expect(
+        exchangeProvider.getPrice(mockCreateQuoteDTO),
+      ).rejects.toThrow(`Error desconocido`);
     });
   });
 
@@ -202,7 +204,7 @@ describe('Exchange provider', () => {
       expect(currencys).toEqual(keysCurrency);
     });
 
-    it('Mostrar errores axios de api no conocido', () => {
+    it('Mostrar errores axios de api no conocido', async () => {
       const axiosError = new axios.AxiosError(
         'Request failed',
         'ERR_BAD_REQUEST',
@@ -226,21 +228,21 @@ describe('Exchange provider', () => {
         },
       };
       httpService.get.mockReturnValue(throwError(() => axiosError));
-      expect(exchangeProvider.getCurrencys()).rejects.toThrow(
+      await expect(exchangeProvider.getCurrencys()).rejects.toThrow(
         BadRequestException,
       );
-      expect(exchangeProvider.getCurrencys()).rejects.toThrow(
+      await expect(exchangeProvider.getCurrencys()).rejects.toThrow(
         `Error desconocido`,
       );
     });
-    it('Mostrar errores no axios de api no conocido', () => {
+    it('Mostrar errores no axios de api no conocido', async () => {
       httpService.get.mockReturnValue(
         throwError(() => new Error('No conocido')),
       );
-      expect(exchangeProvider.getCurrencys()).rejects.toThrow(
+      await expect(exchangeProvider.getCurrencys()).rejects.toThrow(
         InternalServerErrorException,
       );
-      expect(exchangeProvider.getCurrencys()).rejects.toThrow(
+      await expect(exchangeProvider.getCurrencys()).rejects.toThrow(
         `Error desconocido`,
       );
     });
