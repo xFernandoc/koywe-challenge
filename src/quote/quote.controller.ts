@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  NotFoundException,
-  Param,
-  Post,
-  UnauthorizedException,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { QuoteFacade } from './quote.facade';
 import { CreateQuoteRequestDTO } from 'src/models/dtos/quote-request.dto';
 import { JWTGuardCustom } from 'src/guards/jwt.guard';
@@ -25,10 +16,7 @@ export class QuoteController {
     @Body() quoteRequestApiDTO: CreateQuoteRequestDTO,
     @CurrentUser() user: UserEntity,
   ) {
-    return await this.quoteFacade.registerQuote(
-      quoteRequestApiDTO,
-      user._id,
-    );
+    return await this.quoteFacade.registerQuote(quoteRequestApiDTO, user._id);
   }
 
   @Get('currency-available')
@@ -36,7 +24,6 @@ export class QuoteController {
     return await this.quoteFacade.getCurrency();
   }
 
-  
   @UseGuards(QuoteOwnershipGuard)
   @Get('/:id')
   async getQuote(@Param('id') id: string) {

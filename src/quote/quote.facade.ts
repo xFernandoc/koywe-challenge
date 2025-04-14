@@ -11,7 +11,8 @@ export class QuoteFacade {
   ) {}
 
   async registerQuote(quoteRequestApiDTO: CreateQuoteRequestDTO, user: string) {
-    const responseRate = await this.currencyProvider.getPrice(quoteRequestApiDTO);
+    const responseRate =
+      await this.currencyProvider.getPrice(quoteRequestApiDTO);
     if (!responseRate) {
       throw new NotFoundException('Moneda de busqueda no existe');
     }

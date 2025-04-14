@@ -6,7 +6,11 @@ import { LocalStrategy } from '../local.provider';
 
 describe('localStrategy', () => {
   let localStrategy: LocalStrategy;
-  let userService: jest.Mocked<UserService>;
+  let userService: {
+    getUserByEmail: jest.Mock;
+    validatePassword: jest.Mock;
+    setLastLogin: jest.Mock;
+  };
 
   const userMock: UserEntity = {
     firstName: 'Luis',

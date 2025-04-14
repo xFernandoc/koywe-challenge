@@ -12,7 +12,7 @@ export class Quote implements QuoteEntity {
     unique: true,
     required: false,
     type: String,
-    default: nanoid(8).toUpperCase(),
+    default: nanoid(12).toUpperCase(),
   })
   id?: string;
 
