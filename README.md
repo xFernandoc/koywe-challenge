@@ -84,5 +84,8 @@ npm run start:dev
 * Usa `docker compose ps` para saber si tus contenedores están activos
 * Usa `docker compose down` para apagar todos tus contenedores
 
+## 🤖 Chat GPT
+Se hizo uso de la IA `Chat GPT` para la validación de casos de prueba para los tests unitarios asi como tambien el diseño complementario de los tests. Ademas ayudo a la configuración del proyecto para dockerizarlo y tener listo todo el proyecto en un solo contenedor.
+
 ## 👨‍💻 Autor
 Luis Colchón - [xFernandoc](https://github.com/xFernandoc)
